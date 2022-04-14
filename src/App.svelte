@@ -7,12 +7,12 @@
 	import Footer from './Footer.svelte';
 
 	let localSaved = localStorage.getItem("localSaved");
-	let cardList = (localSaved=="1")?JSON.parse(localStorage.getItem("cardList")):JSON.parse(JSON.stringify(database.card));
-	let equippedObject = (localSaved=="1")?JSON.parse(localStorage.getItem("equippedObject")):{};
-	let equippedList = (localSaved=="1")?JSON.parse(localStorage.getItem("equippedList")):{};
-	let equippedEffect = (localSaved=="1")?JSON.parse(localStorage.getItem("equippedEffect")):[];
-	let collectedObject = (localSaved=="1")?JSON.parse(localStorage.getItem("collectedObject")):{};
-	let collectedEffect = (localSaved=="1")?JSON.parse(localStorage.getItem("collectedEffect")):[];
+	let cardList = (localSaved == "1") ? JSON.parse(localStorage.getItem("cardList")) : JSON.parse(JSON.stringify(database.card));
+	let equippedObject = (localSaved == "1") ? JSON.parse(localStorage.getItem("equippedObject")) : {};
+	let equippedList = (localSaved == "1") ? JSON.parse(localStorage.getItem("equippedList")) : {};
+	let equippedEffect = [];
+	let collectedObject = (localSaved == "1") ? JSON.parse(localStorage.getItem("collectedObject")) : {};
+	let collectedEffect = [];
 
 	if(localSaved != "1") {
 		for (let name in cardList) {
@@ -27,13 +27,11 @@
 
 	//localStorage저장
 	$: {
-		localStorage.setItem("localSaved","1");
-		localStorage.setItem("cardList",JSON.stringify(cardList));
-		localStorage.setItem("equippedObject",JSON.stringify(equippedObject));
-		localStorage.setItem("equippedList",JSON.stringify(equippedList));
-		localStorage.setItem("equippedEffect",JSON.stringify(equippedEffect));
-		localStorage.setItem("collectedObject",JSON.stringify(collectedObject));
-		localStorage.setItem("collectedEffect",JSON.stringify(collectedEffect));
+		localStorage.setItem("localSaved", "1");
+		localStorage.setItem("cardList", JSON.stringify(cardList));
+		localStorage.setItem("equippedObject", JSON.stringify(equippedObject));
+		localStorage.setItem("equippedList", JSON.stringify(equippedList));
+		localStorage.setItem("collectedObject", JSON.stringify(collectedObject));
 	}
 
 	//장착카드 목록 계산
@@ -41,7 +39,7 @@
 		equippedObject = {};
 		for(let name in equippedList){
 			let equipped = database.equipJoin[name];
-			if(equipped !== undefined) {
+			if(equipped !== undefined){
 				for (let equip of equipped) {
 					//카드 정보 추가
 					if (equippedObject[equip] == undefined) {
@@ -87,7 +85,7 @@
 		}
 		collectedEffect = [];
 		for(let key in collectMap){
-			if(sumObject[key] !== undefined) {
+			if(sumObject[key] !== undefined){
 				collectedEffect.push([key, sumObject[key]]);
 			}
 		}
@@ -111,22 +109,22 @@
 		}
 	}
 
-	function cardLeftClickEvent(name,isHas,active){
+	function cardLeftClickEvent(name, isHas, active){
 		//카드가 장착되어 있으면 isHas는 1
 		if(equippedList[name] !== undefined){
 			isHas = 1;
 		}
 		let collectList = database.collectJoin[name];
-		if(collectList !== undefined) {
+		if(collectList !== undefined){
 			for (let collect of collectList) {
-				if (isHas === cardList[name].isHas) {
+				if(isHas === cardList[name].isHas){
 					//카드 정보 변경
-					if (isHas === 1) {
+					if(isHas === 1){
 						collectedObject[collect][2] += active - cardList[name].active;
 					}
 				} else if (isHas === 1) {
 					//카드 정보 추가
-					if (collectedObject[collect] == undefined) {
+					if (collectedObject[collect] === undefined) {
 						collectedObject[collect] = [collect, 0, 0];
 					}
 					collectedObject[collect][1] += 1;

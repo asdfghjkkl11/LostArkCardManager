@@ -34,15 +34,15 @@
         cardLeftClickEvent(name, 0, 0);
     }
 </script>
-<div class="card" on:contextmenu|preventDefault={(event) => cardRightClickEvent(name)}>
-    <span class="btn name {rarityMap[rarity]}" on:click={(event) => addEvent()}>{name}</span>
-    <div class="btn circle is-has" class:active={isHas} on:click={(event) => isHasEvent()}></div>
-    <div class="btn hexagon active1" class:active={active1} on:click={(event) => isActiveEvent(1)}></div>
-    <div class="btn hexagon active2" class:active={active2} on:click={(event) => isActiveEvent(2)}></div>
-    <div class="btn hexagon active3" class:active={active3} on:click={(event) => isActiveEvent(3)}></div>
-    <div class="btn hexagon active4" class:active={active4} on:click={(event) => isActiveEvent(4)}></div>
-    <div class="btn hexagon active5" class:active={active5} on:click={(event) => isActiveEvent(5)}></div>
-    <div class="btn close" on:click={(event) => deleteEvent()}></div>
+<div class="card" on:click={(event) => addEvent()} on:contextmenu|preventDefault={(event) => cardRightClickEvent(name)}>
+    <span class="btn name {rarityMap[rarity]}">{name}</span>
+    <div class="btn circle is-has" class:active={isHas} on:click|stopPropagation={(event) => isHasEvent()}></div>
+    <div class="btn hexagon active1" class:active={active1} on:click|stopPropagation={(event) => isActiveEvent(1)}></div>
+    <div class="btn hexagon active2" class:active={active2} on:click|stopPropagation={(event) => isActiveEvent(2)}></div>
+    <div class="btn hexagon active3" class:active={active3} on:click|stopPropagation={(event) => isActiveEvent(3)}></div>
+    <div class="btn hexagon active4" class:active={active4} on:click|stopPropagation={(event) => isActiveEvent(4)}></div>
+    <div class="btn hexagon active5" class:active={active5} on:click|stopPropagation={(event) => isActiveEvent(5)}></div>
+    <div class="btn close" on:click|stopPropagation={(event) => deleteEvent()}></div>
 </div>
 <style>
     .card{
@@ -58,6 +58,11 @@
         border: solid 1px var(--border);
         border-radius: 4px;
         background: linear-gradient(0deg,#4a4c52 0,#53555d);
+        -ms-user-select: none;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
     }
     .card:hover{
         background: #222327;
