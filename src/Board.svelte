@@ -1,11 +1,7 @@
 <script>
-	import Card from './Card.svelte';
-	export let renderCardList;
 </script>
 <div class="board">
-	{#each Object.entries(renderCardList) as [name, info]}
-		<Card {info}/>
-	{/each}
+	<slot></slot>
 </div>
 <style>
 	.board{

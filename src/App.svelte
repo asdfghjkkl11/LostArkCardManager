@@ -4,6 +4,9 @@
 	import Info from './Info.svelte';
 	import Sort from './Sort.svelte';
 	import Board from './Board.svelte';
+	import Card from './Card.svelte';
+	import GradeBoard from "./GradeBoard.svelte";
+	import CollectBoard from "./CollectBoard.svelte";
 	import Header from './Header.svelte';
 	import Equip from './Equip.svelte';
 	import Collect from './Collect.svelte';
@@ -11,13 +14,13 @@
 
 	let localSaved = localStorage.getItem("localSaved");
 	let cardList = JSON.parse(JSON.stringify(database.card));
-	let equippedObject = (localSaved == "1") ? JSON.parse(localStorage.getItem("equippedObject")) : {};
-	let equippedList = (localSaved == "1") ? JSON.parse(localStorage.getItem("equippedList")) : {};
+	let equippedObject = (localSaved === "1") ? JSON.parse(localStorage.getItem("equippedObject")) : {};
+	let equippedList = (localSaved === "1") ? JSON.parse(localStorage.getItem("equippedList")) : {};
 	let equippedEffect = [];
-	let collectedObject = (localSaved == "1") ? JSON.parse(localStorage.getItem("collectedObject")) : {};
+	let collectedObject = (localSaved === "1") ? JSON.parse(localStorage.getItem("collectedObject")) : {};
 	let collectedEffect = [];
 
-	let groupFlag = 0;
+	let groupFlag = 1;
 	let gradeFilter = {
 		"일반": 0,
 		"고급": 0,
@@ -78,7 +81,7 @@
 			if(equipped !== undefined){
 				for (let equip of equipped) {
 					//카드 정보 추가
-					if (equippedObject[equip] == undefined) {
+					if (equippedObject[equip] === undefined) {
 						equippedObject[equip] = [equip, 0, 0];
 					}
 					equippedObject[equip][1] += 1;
@@ -129,7 +132,7 @@
 		}
 	}
 
-	let renderCardList = {};
+	let renderCardList;
 
 	$:{
 		renderCardList = {};
@@ -151,11 +154,7 @@
 				return true;
 			}
 
-			if(gradeFilter[card.grade] === 1){
-				return true;
-			}
-
-			return false;
+			return gradeFilter[card.grade] === 1;
 		}
 
 		function checkKind(card){
@@ -289,6 +288,10 @@
 		kindFilter[name] ^= 1;
 	}
 
+	function getCollectList(name){
+		return database.collectJoin[name];
+	}
+
 	setContext("cardLeftClickEvent",cardLeftClickEvent);
 	setContext("cardRightClickEvent",cardRightClickEvent);
 </script>
@@ -296,7 +299,17 @@
 <Info/>
 <Sort {groupFlag} {gradeFilter} {kindFilter} {groupFlagClickEvent} {gradeFilterClickEvent} {kindFilterClickEvent}/>
 <div class="main" style="">
-	<Board {renderCardList}/>
+	{#if groupFlag === 0}
+		<Board>
+			{#each Object.entries(renderCardList) as [name, info]}
+				<Card {info}/>
+			{/each}
+		</Board>
+	{:else if groupFlag === 1}
+		<GradeBoard {renderCardList}/>
+	{:else}
+		<CollectBoard {renderCardList} {getCollectList}/>
+	{/if}
 	<div class="right-area">
 		<Equip {equippedList} {equippedEffect} {removeEquippedEvent}/>
 		<Collect {collectedEffect}/>
