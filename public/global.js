@@ -1,9 +1,9 @@
-let rarityMap = {
-    "일반": "rarity-color1",
-    "고급": "rarity-color2",
-    "희귀": "rarity-color3",
-    "영웅": "rarity-color4",
-    "전설": "rarity-color5",
+let gradeMap = {
+    "일반": "grade-color1",
+    "고급": "grade-color2",
+    "희귀": "grade-color3",
+    "영웅": "grade-color4",
+    "전설": "grade-color5",
 }
 
 let collectMap = {

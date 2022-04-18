@@ -2,13 +2,11 @@
     export let equippedList;
     export let equippedEffect;
     export let removeEquippedEvent;
-    $: cardList = equippedList;
-    $: effectList = equippedEffect;
 
     let flag = false;
 
     function toggle(){
-        flag = flag ^ true;
+        flag ^= true;
     }
 </script>
 <div class="wrapper">
@@ -23,15 +21,15 @@
         </button>
     </div>
     <div class="list">
-        {#each Object.entries(cardList) as [name, info]}
+        {#each Object.entries(equippedList) as [name, info]}
             <span class="item card btn" on:contextmenu|preventDefault={(event) => removeEquippedEvent(info.name)}>
-                <span class="{rarityMap[info.rarity]}">{info.name}</span>
+                <span class="{gradeMap[info.grade]}">{info.name}</span>
                 <span>({info.active})</span>
             </span>
         {/each}
     </div>
     <div class="list">
-        {#each effectList as effect}
+        {#each equippedEffect as effect}
             {#if effect[4] || flag}
                 <span class="item effect" class:active={effect[4]}>
                     <span class="effect-title">

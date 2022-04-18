@@ -1,28 +1,64 @@
 <script>
+	import {setContext} from 'svelte';
 	import * as database from '../public/database.json';
-	import Card from './Card.svelte';
+	import Info from './Info.svelte';
+	import Sort from './Sort.svelte';
+	import Board from './Board.svelte';
 	import Header from './Header.svelte';
 	import Equip from './Equip.svelte';
 	import Collect from './Collect.svelte';
 	import Footer from './Footer.svelte';
 
 	let localSaved = localStorage.getItem("localSaved");
-	let cardList = (localSaved == "1") ? JSON.parse(localStorage.getItem("cardList")) : JSON.parse(JSON.stringify(database.card));
+	let cardList = JSON.parse(JSON.stringify(database.card));
 	let equippedObject = (localSaved == "1") ? JSON.parse(localStorage.getItem("equippedObject")) : {};
 	let equippedList = (localSaved == "1") ? JSON.parse(localStorage.getItem("equippedList")) : {};
 	let equippedEffect = [];
 	let collectedObject = (localSaved == "1") ? JSON.parse(localStorage.getItem("collectedObject")) : {};
 	let collectedEffect = [];
 
-	if(localSaved != "1") {
-		for (let name in cardList) {
-			cardList[name] = {
-				"name": name,
-				"rarity": cardList[name],
-				"isHas": 0,
-				"active": 0
-			}
+	let groupFlag = 0;
+	let gradeFilter = {
+		"일반": 0,
+		"고급": 0,
+		"희귀": 0,
+		"영웅": 0,
+		"전설": 0
+	};
+	let kindFilter = {
+		"힘": 0,
+		"민첩": 0,
+		"지능": 0,
+		"체력": 0,
+		"치명": 0,
+		"특화": 0,
+		"제압": 0,
+		"신속": 0,
+		"인내": 0,
+		"숙련": 0,
+		"물리 방어력": 0,
+		"마법 방어력": 0,
+		"인간": 0,
+		"악마": 0,
+		"물질": 0,
+		"불사": 0,
+		"식물": 0,
+		"곤충": 0,
+		"야수": 0,
+		"기계": 0
+	};
+
+	for (let name in cardList) {
+		cardList[name] = {
+			"name": name,
+			"grade": cardList[name],
+			"isHas": 0,
+			"active": 0
 		}
+	}
+
+	if(localSaved === "1") {
+		Object.assign(cardList, JSON.parse(localStorage.getItem("cardList")));
 	}
 
 	//localStorage저장
@@ -72,6 +108,7 @@
 	//수집카드 목록 계산
 	$: {
 		let sumObject = {};
+
 		for(let key in collectedObject){
 			let data = database.collect[key];
 			for(let collect of data){
@@ -84,10 +121,68 @@
 			}
 		}
 		collectedEffect = [];
+
 		for(let key in collectMap){
 			if(sumObject[key] !== undefined){
 				collectedEffect.push([key, sumObject[key]]);
 			}
+		}
+	}
+
+	let renderCardList = {};
+
+	$:{
+		renderCardList = {};
+
+		for(let name in cardList){
+			if(checkGrade(cardList[name]) && checkKind(cardList[name])){
+				renderCardList[name] = cardList[name];
+			}
+		}
+
+		function checkGrade(card){
+			let sum = 0;
+
+			for(let grade in gradeFilter){
+				sum += gradeFilter[grade];
+			}
+
+			if(sum === 0){
+				return true;
+			}
+
+			if(gradeFilter[card.grade] === 1){
+				return true;
+			}
+
+			return false;
+		}
+
+		function checkKind(card){
+			let sum = 0;
+
+			for(let kind in kindFilter){
+				sum += kindFilter[kind];
+			}
+
+			if(sum === 0){
+				return true;
+			}
+
+			let collectList = database.collectJoin[card.name];
+
+			if(collectList) {
+				for (let i = 0; i < collectList.length; i++) {
+					let effectList = database.collect[collectList[i]];
+					for (let effect of effectList) {
+						if (kindFilter[effect[3]] === 1) {
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 
@@ -102,7 +197,7 @@
 		for(let name in cardList){
 			cardList[name] = {
 				"name": name,
-				"rarity": cardList[name],
+				"grade": cardList[name],
 				"isHas": 0,
 				"active": 0
 			}
@@ -165,7 +260,7 @@
 			if(equippedCardList.length < 6){
 				equippedList[name] = {
 					"name": name,
-					"rarity": database.card[name],
+					"grade": database.card[name],
 					"isHas": cardList[name].isHas,
 					"active": cardList[name].active
 				}
@@ -181,29 +276,40 @@
 			delete equippedList[name];
 		}
 	}
+
+	function groupFlagClickEvent(flag){
+		groupFlag = flag;
+	}
+
+	function gradeFilterClickEvent(name){
+		gradeFilter[name] ^= 1;
+	}
+
+	function kindFilterClickEvent(name){
+		kindFilter[name] ^= 1;
+	}
+
+	setContext("cardLeftClickEvent",cardLeftClickEvent);
+	setContext("cardRightClickEvent",cardRightClickEvent);
 </script>
 <Header/>
-<div style="display: flex">
-<div class="board">
-	{#each Object.entries(cardList) as [name, info]}
-		<Card {info} {cardLeftClickEvent} {cardRightClickEvent}/>
-	{/each}
-</div>
-<div class="right-area">
-	<Equip {equippedList} {equippedEffect} {removeEquippedEvent}/>
-	<Collect {collectedEffect}/>
-</div>
+<Info/>
+<Sort {groupFlag} {gradeFilter} {kindFilter} {groupFlagClickEvent} {gradeFilterClickEvent} {kindFilterClickEvent}/>
+<div class="main" style="">
+	<Board {renderCardList}/>
+	<div class="right-area">
+		<Equip {equippedList} {equippedEffect} {removeEquippedEvent}/>
+		<Collect {collectedEffect}/>
+	</div>
 </div>
 <Footer/>
 <style>
-	.board{
-		column-width: 340px;
-		overflow: auto;
+	.main{
+		display: flex;
 	}
 	.right-area{
 		width: 400px;
 		height: 800px;
-		padding-right: 16px;
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
@@ -211,5 +317,16 @@
 		position: sticky;
 		top: 100px;
 		right: 0;
+	}
+	@media (max-width: 800px) {
+		.main{
+			flex-direction: column;
+			gap: 20px;
+		}
+		.right-area{
+			height: auto;
+			position: relative;
+			top: 0;
+		}
 	}
 </style>

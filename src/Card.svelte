@@ -1,10 +1,11 @@
 <script>
+    import {getContext} from 'svelte';
     export let info;
-    export let cardLeftClickEvent;
-    export let cardRightClickEvent;
+    let cardLeftClickEvent = getContext("cardLeftClickEvent");
+    let cardRightClickEvent = getContext("cardRightClickEvent");
 
     $: name = info.name;
-    $: rarity = info.rarity;
+    $: grade = info.grade;
     $: isHas = info.isHas === 1;
     $: active1 = info.active > 0;
     $: active2 = info.active > 1;
@@ -35,7 +36,7 @@
     }
 </script>
 <div class="card" on:click={(event) => addEvent()} on:contextmenu|preventDefault={(event) => cardRightClickEvent(name)}>
-    <span class="btn name {rarityMap[rarity]}">{name}</span>
+    <span class="btn name {gradeMap[grade]}">{name}</span>
     <div class="btn circle is-has" class:active={isHas} on:click|stopPropagation={(event) => isHasEvent()}></div>
     <div class="btn hexagon active1" class:active={active1} on:click|stopPropagation={(event) => isActiveEvent(1)}></div>
     <div class="btn hexagon active2" class:active={active2} on:click|stopPropagation={(event) => isActiveEvent(2)}></div>

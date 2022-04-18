@@ -1,9 +1,10 @@
 :root{
 	--inactive: #cdcdcd;
-	--active: #e9b73b;
+	--active: #d1a722;
 	--border: #34373e;
 }
 html, body {
+	min-width: 800px;
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -67,19 +68,19 @@ button:focus {
 	border-color: #666;
 }
 
-.rarity-color1{
+.grade-color1{
 	color: #b8b8b8;
 }
-.rarity-color2{
+.grade-color2{
 	color: #91fe02;
 }
-.rarity-color3{
+.grade-color3{
 	color: #00b5ff;
 }
-.rarity-color4{
+.grade-color4{
 	color: #bf00fe;
 }
-.rarity-color5{
+.grade-color5{
 	color: #f39303;
 }
 .btn{
