@@ -21,6 +21,7 @@
 	let collectedEffect = [];
 
 	let groupFlag = 1;
+	let gradeSum = 0;
 	let gradeFilter = {
 		"일반": 0,
 		"고급": 0,
@@ -28,6 +29,7 @@
 		"영웅": 0,
 		"전설": 0
 	};
+	let kindSum = 0;
 	let kindFilter = {
 		"힘": 0,
 		"민첩": 0,
@@ -135,6 +137,21 @@
 	let renderCardList;
 
 	$:{
+
+		gradeSum = 0;
+
+		for(let grade in gradeFilter){
+			gradeSum += gradeFilter[grade];
+		}
+
+		kindSum = 0;
+
+		for(let kind in kindFilter){
+			kindSum += kindFilter[kind];
+		}
+	}
+
+	$:{
 		renderCardList = {};
 
 		for(let name in cardList){
@@ -144,13 +161,7 @@
 		}
 
 		function checkGrade(card){
-			let sum = 0;
-
-			for(let grade in gradeFilter){
-				sum += gradeFilter[grade];
-			}
-
-			if(sum === 0){
+			if(gradeSum === 0){
 				return true;
 			}
 
@@ -158,13 +169,7 @@
 		}
 
 		function checkKind(card){
-			let sum = 0;
-
-			for(let kind in kindFilter){
-				sum += kindFilter[kind];
-			}
-
-			if(sum === 0){
+			if(kindSum === 0){
 				return true;
 			}
 
@@ -289,7 +294,28 @@
 	}
 
 	function getCollectList(name){
-		return database.collectJoin[name];
+		let result = [];
+		let collectList = database.collectJoin[name];
+
+		if(kindSum === 0){
+			return collectList;
+		}
+
+		if(collectList) {
+			for (let i = 0; i < collectList.length; i++) {
+				let effect = database.collect[collectList[i]];
+
+				for(let j = 0; j < effect.length; j++){
+					let kind = effect[j][3];
+					if(kindFilter[kind] === 1){
+						result.push(collectList[i]);
+						break;
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	setContext("cardLeftClickEvent",cardLeftClickEvent);
