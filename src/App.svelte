@@ -344,10 +344,12 @@
 <Footer/>
 <style>
 	.main{
+		padding: 8px;
 		display: flex;
+		gap: 8px;
 	}
 	.right-area{
-		width: 400px;
+		width: 380px;
 		height: 800px;
 		flex-shrink: 0;
 		display: flex;

@@ -6,7 +6,7 @@
 </div>
 <style>
     .info{
-        padding: 8px 0;
+        padding: 8px;
         display: flex;
         flex-direction: column;
         font-weight: 500;

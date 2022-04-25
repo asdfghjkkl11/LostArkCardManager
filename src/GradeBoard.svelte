@@ -5,11 +5,11 @@
 	let renderList;
 	$: {
 		renderList = {
-			"일반": [],
-			"고급": [],
-			"희귀": [],
+			"전설": [],
 			"영웅": [],
-			"전설": []
+			"희귀": [],
+			"고급": [],
+			"일반": []
 		};
 
 		for(let card in renderCardList){
