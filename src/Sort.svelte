@@ -1,4 +1,5 @@
 <script>
+    export let calculateFlag;
     export let groupFlag;
     export let gradeFilter;
     export let kindFilter;
@@ -22,7 +23,9 @@
     <div class="layer">
         <div class="label">세트효과</div>
         {#each Object.entries(collectMap) as [name, info]}
-            <button class="btn-sort" class:active={kindFilter[name] === 1} on:click={(event) => kindFilterClickEvent(name)}>{name}</button>
+            {#if calculateFlag !== 1 || info}
+                <button class="btn-sort" class:active={kindFilter[name] === 1} on:click={(event) => kindFilterClickEvent(name)}>{name}</button>
+            {/if}
         {/each}
     </div>
 </div>

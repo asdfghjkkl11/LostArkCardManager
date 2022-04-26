@@ -11,8 +11,10 @@
 	import Equip from './Equip.svelte';
 	import Collect from './Collect.svelte';
 	import Footer from './Footer.svelte';
+	import CalculateBoard from "./CalculateBoard.svelte";
 
 	let localSaved = localStorage.getItem("localSaved");
+	let gradeList = JSON.parse(JSON.stringify(database.grade));
 	let cardList = JSON.parse(JSON.stringify(database.card));
 	let equippedObject = (localSaved === "1") ? JSON.parse(localStorage.getItem("equippedObject")) : {};
 	let equippedList = (localSaved === "1") ? JSON.parse(localStorage.getItem("equippedList")) : {};
@@ -20,6 +22,7 @@
 	let collectedObject = (localSaved === "1") ? JSON.parse(localStorage.getItem("collectedObject")) : {};
 	let collectedEffect = [];
 
+	let calculateFlag = 0;
 	let groupFlag = 1;
 	let gradeSum = 0;
 	let gradeFilter = {
@@ -281,6 +284,15 @@
 		}
 	}
 
+	function calculateFlagClickEvent(){
+		calculateFlag ^= 1;
+		for(let key in collectMap){
+			if(!collectMap[key]){
+				kindFilter[key] = 0;
+			}
+		}
+	}
+
 	function groupFlagClickEvent(flag){
 		groupFlag = flag;
 	}
@@ -314,7 +326,11 @@
 				}
 			}
 		}
+		return result;
+	}
 
+	function getCollect(name){
+		let result = database.collect[name];
 		return result;
 	}
 
@@ -322,19 +338,23 @@
 	setContext("cardRightClickEvent",cardRightClickEvent);
 </script>
 <Header/>
-<Info/>
-<Sort {groupFlag} {gradeFilter} {kindFilter} {groupFlagClickEvent} {gradeFilterClickEvent} {kindFilterClickEvent}/>
+<Info {calculateFlag} {calculateFlagClickEvent}/>
+<Sort {calculateFlag} {groupFlag} {gradeFilter} {kindFilter} {groupFlagClickEvent} {gradeFilterClickEvent} {kindFilterClickEvent}/>
 <div class="main" style="">
-	{#if groupFlag === 0}
-		<Board>
-			{#each Object.entries(renderCardList) as [name, info]}
-				<Card {info}/>
-			{/each}
-		</Board>
-	{:else if groupFlag === 1}
-		<GradeBoard {renderCardList}/>
+	{#if calculateFlag === 0}
+		{#if groupFlag === 0}
+			<Board>
+				{#each Object.entries(renderCardList) as [name, info]}
+					<Card {info}/>
+				{/each}
+			</Board>
+		{:else if groupFlag === 1}
+			<GradeBoard {renderCardList}/>
+		{:else}
+			<CollectBoard {renderCardList} {getCollectList}/>
+		{/if}
 	{:else}
-		<CollectBoard {renderCardList} {getCollectList}/>
+		<CalculateBoard {renderCardList} {collectedObject} {gradeList} {getCollectList} {getCollect}/>
 	{/if}
 	<div class="right-area">
 		<Equip {equippedList} {equippedEffect} {removeEquippedEvent}/>
