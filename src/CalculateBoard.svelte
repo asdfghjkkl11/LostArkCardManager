@@ -40,32 +40,34 @@
 		}
 
 		for(let render in renderObject){
-			renderObject[render].sort(function (a,b){
-				return a.exp - b.exp;
-			});
+			if(collectedObject[render] !== undefined) {
+				renderObject[render].sort(function (a, b) {
+					return a.exp - b.exp;
+				});
 
-			let [collect,isHas,active] = collectedObject[render];
-			let effect = getCollect(collect);
-			let index = 0;
-			let expSum = 0;
-			let tempList = [];
+				let [collect, isHas, active] = collectedObject[render];
+				let effect = getCollect(collect);
+				let index = 0;
+				let expSum = 0;
+				let tempList = [];
 
-			for(let i = 0; i < effect.length; i++){
-				if(isHas >= effect[i][1] && active < effect[i][2]) {
-					while(index + active < effect[i][2]){
-						expSum += renderObject[render][index].exp;
-						tempList.push(renderObject[render][index]);
-						index ++;
+				for(let i = 0; i < effect.length; i++) {
+					if(isHas >= effect[i][1] && active < effect[i][2]) {
+						while(index + active < effect[i][2]) {
+							expSum += renderObject[render][index].exp;
+							tempList.push(renderObject[render][index]);
+							index++;
+						}
+						renderList.push({
+							"collect": collect,
+							"expSum": expSum,
+							"cardList": tempList,
+							"effect1": effect[i][3],
+							"effect2": effect[i][4]
+						});
+						expSum = 0;
+						tempList = [];
 					}
-					renderList.push({
-						"collect": collect,
-						"expSum": expSum,
-						"cardList": tempList,
-						"effect1": effect[i][3],
-						"effect2": effect[i][4]
-					});
-					expSum = 0;
-					tempList = [];
 				}
 			}
 		}

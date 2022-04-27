@@ -216,13 +216,17 @@
 		if(equippedList[name] !== undefined){
 			isHas = 1;
 		}
+
 		let collectList = database.collectJoin[name];
+
 		if(collectList !== undefined){
 			for (let collect of collectList) {
-				if(isHas === cardList[name].isHas){
+				if (isHas === cardList[name].isHas) {
 					//카드 정보 변경
-					if(isHas === 1){
-						collectedObject[collect][2] += active - cardList[name].active;
+					if (isHas === 1) {
+						if(collectedObject[collect] !== undefined) {
+							collectedObject[collect][2] += active - cardList[name].active;
+						}
 					}
 				} else if (isHas === 1) {
 					//카드 정보 추가
@@ -233,11 +237,13 @@
 					collectedObject[collect][2] += active;
 				} else {
 					//카드 정보 삭제
-					collectedObject[collect][1] -= 1;
-					collectedObject[collect][2] -= cardList[name].active;
+					if(collectedObject[collect] !== undefined) {
+						collectedObject[collect][1] -= 1;
+						collectedObject[collect][2] -= cardList[name].active;
 
-					if (collectedObject[collect][1] < 1 && collectedObject[collect][2] < 1) {
-						delete collectedObject[collect];
+						if (collectedObject[collect][1] < 1 && collectedObject[collect][2] < 1) {
+							delete collectedObject[collect];
+						}
 					}
 				}
 			}
@@ -290,6 +296,9 @@
 			if(!collectMap[key]){
 				kindFilter[key] = 0;
 			}
+		}
+		for(let key in gradeFilter){
+			gradeFilter[key] = 0;
 		}
 	}
 

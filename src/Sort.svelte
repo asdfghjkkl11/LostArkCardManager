@@ -8,18 +8,20 @@
     export let kindFilterClickEvent;
 </script>
 <div class="sort">
-    <div class="layer">
-        <div class="label">그룹</div>
-<!--        <button class="btn-sort" class:active={groupFlag === 0} on:click={(event) => groupFlagClickEvent(0)}>기본</button>-->
-        <button class="btn-sort" class:active={groupFlag === 1} on:click={(event) => groupFlagClickEvent(1)}>등급별</button>
-        <button class="btn-sort" class:active={groupFlag === 2} on:click={(event) => groupFlagClickEvent(2)}>수집세트별</button>
-    </div>
-    <div class="layer">
-        <div class="label">등급</div>
-        {#each Object.entries(gradeMap) as [name, info]}
-            <button class="btn-sort" class:active={gradeFilter[name] === 1} on:click={(event) => gradeFilterClickEvent(name)}>{name}</button>
-        {/each}
-    </div>
+    {#if calculateFlag !== 1}
+        <div class="layer">
+            <div class="label">그룹</div>
+    <!--        <button class="btn-sort" class:active={groupFlag === 0} on:click={(event) => groupFlagClickEvent(0)}>기본</button>-->
+            <button class="btn-sort" class:active={groupFlag === 1} on:click={(event) => groupFlagClickEvent(1)}>등급별</button>
+            <button class="btn-sort" class:active={groupFlag === 2} on:click={(event) => groupFlagClickEvent(2)}>수집세트별</button>
+        </div>
+        <div class="layer">
+            <div class="label">등급</div>
+            {#each Object.entries(gradeMap) as [name, info]}
+                <button class="btn-sort" class:active={gradeFilter[name] === 1} on:click={(event) => gradeFilterClickEvent(name)}>{name}</button>
+            {/each}
+        </div>
+    {/if}
     <div class="layer">
         <div class="label">세트효과</div>
         {#each Object.entries(collectMap) as [name, info]}
