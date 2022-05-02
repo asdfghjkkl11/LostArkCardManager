@@ -1,5 +1,5 @@
 <div class="header">
-    <h2>로아 카드 계산기</h2>
+    <h1>로아 카드 계산기</h1>
 </div>
 <style>
     .header{

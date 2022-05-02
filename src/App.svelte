@@ -385,7 +385,7 @@
 		flex-direction: column;
 		gap: 20px;
 		position: sticky;
-		top: 100px;
+		top: 8px;
 		right: 0;
 	}
 	@media (max-width: 800px) {
