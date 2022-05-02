@@ -3,15 +3,15 @@
 	import * as database from '../public/database.json';
 	import Info from './Info.svelte';
 	import Sort from './Sort.svelte';
-	import Board from './Board.svelte';
-	import Card from './Card.svelte';
-	import GradeBoard from "./GradeBoard.svelte";
-	import CollectBoard from "./CollectBoard.svelte";
+	import Board from './board/Board.svelte';
+	import Card from './board/Card.svelte';
+	import GradeBoard from "./board/GradeBoard.svelte";
+	import CollectBoard from "./board/CollectBoard.svelte";
 	import Header from './Header.svelte';
-	import Equip from './Equip.svelte';
-	import Collect from './Collect.svelte';
+	import Equip from './board/Equip.svelte';
+	import Collect from './board/Collect.svelte';
 	import Footer from './Footer.svelte';
-	import CalculateBoard from "./CalculateBoard.svelte";
+	import CalculateBoard from "./board/CalculateBoard.svelte";
 
 	let localSaved = localStorage.getItem("localSaved");
 	let gradeList = JSON.parse(JSON.stringify(database.grade));

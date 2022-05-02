@@ -7,6 +7,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #b8b8b8;
+        color: white;
     }
 </style>

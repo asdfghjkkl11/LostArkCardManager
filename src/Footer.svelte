@@ -1,5 +1,5 @@
 <div class="footer">
-    made by asdfghjkkl11
+    Copyright © 2022 asdfghjkkl11
 </div>
 <style>
     .footer{
