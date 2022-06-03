@@ -1,19 +1,30 @@
 <script>
     export let collectedEffect;
-    $: collectList = collectedEffect;
+    export let wholeCollectedEffect;
 </script>
 <div class="wrapper">
     <div class="header">
         수집 카드 효과
     </div>
     <ul class="list">
-        {#each collectList as collect}
+        {#each collectedEffect as collect}
             <li class="item">
-                {#if collectMap[collect[0]]}
-                    {collect[0]} 계열 피해량 증가 +{collect[1].toFixed(2)}%
-                {:else}
-                    {collect[0]} +{collect[1]}
-                {/if}
+                <span class="effect">
+                    <span>
+                        {#if collectMap[collect[0]]}
+                            {collect[0]} 계열 피해량 증가 +{collect[1]}%
+                        {:else}
+                            {collect[0]} +{collect[1]}
+                        {/if}
+                    </span>
+                    <span>
+                        {#if collectMap[collect[0]]}
+                            (+{wholeCollectedEffect[collect[0]]}%)
+                        {:else}
+                            (+{wholeCollectedEffect[collect[0]]})
+                        {/if}
+                    </span>
+                </span>
             </li>
         {/each}
     </ul>
@@ -39,5 +50,9 @@
     }
     .item{
         margin-left: 20px;
+    }
+    .effect{
+        display: flex;
+        justify-content: space-between;
     }
 </style>

@@ -132,7 +132,11 @@
 
 		for(let key in collectMap){
 			if(sumObject[key] !== undefined){
-				collectedEffect.push([key, sumObject[key]]);
+				let value = sumObject[key];
+				if(collectMap[key]){
+					value = value.toFixed(2);
+				}
+				collectedEffect.push([key, value]);
 			}
 		}
 	}
@@ -140,7 +144,6 @@
 	let renderCardList;
 
 	$:{
-
 		gradeSum = 0;
 
 		for(let grade in gradeFilter){
@@ -193,20 +196,21 @@
 		}
 	}
 
-	function init(){
-		cardList = JSON.parse(JSON.stringify(database.card));
-		equippedObject = {};
-		equippedList = {};
-		equippedEffect = [];
-		collectedObject = {};
-		collectedEffect = [];
-
-		for(let name in cardList){
-			cardList[name] = {
-				"name": name,
-				"grade": cardList[name],
-				"isHas": 0,
-				"active": 0
+	//전체카드 수집효과 계산
+	let wholeCollectedEffect = {};
+	{
+		for(let key in database.collect){
+			let data = database.collect[key];
+			for(let collect of data){
+				if(wholeCollectedEffect[collect[3]] === undefined){
+					wholeCollectedEffect[collect[3]] = 0;
+				}
+				wholeCollectedEffect[collect[3]] += Number(collect[4]);
+			}
+		}
+		for(let key in collectMap){
+			if(collectMap[key]){
+				wholeCollectedEffect[key] = wholeCollectedEffect[key].toFixed(2);
 			}
 		}
 	}
@@ -367,7 +371,7 @@
 	{/if}
 	<div class="right-area">
 		<Equip {equippedList} {equippedEffect} {removeEquippedEvent}/>
-		<Collect {collectedEffect}/>
+		<Collect {collectedEffect} {wholeCollectedEffect}/>
 	</div>
 </div>
 <Footer/>
