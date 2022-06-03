@@ -29,3 +29,11 @@ let collectMap = {
     "야수": true,
     "기계": true
 }
+
+let CSVMap = {
+    "이름": "name",
+    "등급": "grade",
+    "보유": "isHas",
+    "각성": "active",
+    "장착": "equip"
+}

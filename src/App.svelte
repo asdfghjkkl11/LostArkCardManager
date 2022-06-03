@@ -351,7 +351,7 @@
 	setContext("cardRightClickEvent",cardRightClickEvent);
 </script>
 <Header/>
-<Info {calculateFlag} {calculateFlagClickEvent}/>
+<Info {cardList} {equippedList} {calculateFlag} {calculateFlagClickEvent}/>
 <Sort {calculateFlag} {groupFlag} {gradeFilter} {kindFilter} {groupFlagClickEvent} {gradeFilterClickEvent} {kindFilterClickEvent}/>
 <div class="main" style="">
 	{#if calculateFlag === 0}
