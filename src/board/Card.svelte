@@ -91,25 +91,11 @@
     .hexagon.active{
         background-image: url("/image/hex-active.svg");
     }
-
     .close {
         width: 16px;
         height: 16px;
-        position: relative;
-    }
-    .close:before, .close:after {
-        width: 3px;
-        height: 17px;
-        position: absolute;
-        left: 6.4px;
-        top: -0.4px;
-        content:' ';
-        background-color: #343434;
-    }
-    .close:before {
-        transform: rotate(45deg);
-    }
-    .close:after {
-        transform: rotate(-45deg);
+        background-image: url("/image/close.svg");
+        background-repeat: no-repeat;
+        contain: content;
     }
 </style>
