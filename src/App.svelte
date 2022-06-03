@@ -379,7 +379,8 @@
 	}
 	.right-area{
 		width: 380px;
-		height: 800px;
+		min-height: 800px;
+		max-height: 1100px;
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;

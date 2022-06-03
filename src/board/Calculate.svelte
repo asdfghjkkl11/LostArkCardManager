@@ -1,10 +1,18 @@
 <script>
+    import {getContext} from 'svelte';
     export let info;
+    let cardLeftClickEvent = getContext("cardLeftClickEvent");
+
     $: name = info.name;
     $: grade = info.grade;
     $: exp = info.exp;
+    $: active = info.active;
+
+    function addEvent(){
+        cardLeftClickEvent(name, 1, active);
+    }
 </script>
-<div class="calculate">
+<div class="calculate" on:click={(event) => addEvent()}>
     <span class="btn name {gradeMap[grade]}">{name}</span>
     <span class="exp">{exp}</span>
 </div>

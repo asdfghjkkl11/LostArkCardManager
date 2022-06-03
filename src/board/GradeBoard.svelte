@@ -33,5 +33,6 @@
 	.board{
 		column-width: 340px;
 		overflow: auto;
+		flex: 1;
 	}
 </style>

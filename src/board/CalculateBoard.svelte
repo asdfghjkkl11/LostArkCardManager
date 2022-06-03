@@ -32,7 +32,8 @@
 						renderObject[collectList[i]].push({
 							"name": name,
 							"grade": grade,
-							"exp": exp
+							"exp": exp,
+							"active": j
 						});
 					}
 				}
@@ -76,14 +77,38 @@
 		});
 	}
 </script>
-<div class="board">
-	{#each renderList as calculateList}
-		<CalculateGroup {calculateList}/>
-	{/each}
-</div>
+{#if renderList.length > 0}
+	<div class="board">
+		{#each renderList as calculateList}
+			<CalculateGroup {calculateList}/>
+		{/each}
+	</div>
+{:else}
+	<div class="empty">
+		<div class="info">
+			<span>남은 카드가 없습니다.</span>
+		</div>
+	</div>
+{/if}
 <style>
 	.board {
 		column-width: 340px;
 		overflow: auto;
+		flex: 1;
+	}
+	.empty{
+		flex: 1;
+	}
+	.info{
+		height: 32px;
+		padding: 4px 8px;
+		font-size: 18px;
+		font-weight: bold;
+		background: #343434;
+		color: #cdcdcd;
+		border-radius: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
